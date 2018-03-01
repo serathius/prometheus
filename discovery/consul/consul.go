@@ -118,6 +118,7 @@ func (c *SDConfig) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	if strings.TrimSpace(c.Server) == "" {
 		return fmt.Errorf("Consul SD configuration requires a server address")
 	}
+	// TODO validate config
 	return nil
 }
 

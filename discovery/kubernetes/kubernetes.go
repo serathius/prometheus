@@ -96,6 +96,7 @@ type SDConfig struct {
 
 // UnmarshalYAML implements the yaml.Unmarshaler interface.
 func (c *SDConfig) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	// TODO validate config
 	*c = SDConfig{}
 	type plain SDConfig
 	err := unmarshal((*plain)(c))

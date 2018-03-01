@@ -69,9 +69,9 @@ var (
 type SDConfig struct {
 	Port            int                `yaml:"port"`
 	SubscriptionID  string             `yaml:"subscription_id"`
-	TenantID        string             `yaml:"tenant_id,omitempty"`
-	ClientID        string             `yaml:"client_id,omitempty"`
-	ClientSecret    config_util.Secret `yaml:"client_secret,omitempty"`
+	TenantID        string             `yaml:"tenant_id"`
+	ClientID        string             `yaml:"client_id"`
+	ClientSecret    config_util.Secret `yaml:"client_secret"`
 	RefreshInterval model.Duration     `yaml:"refresh_interval,omitempty"`
 
 	// Catches all undefined fields and must be empty after parsing.
@@ -80,6 +80,7 @@ type SDConfig struct {
 
 // UnmarshalYAML implements the yaml.Unmarshaler interface.
 func (c *SDConfig) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	// TODO validate config
 	*c = DefaultSDConfig
 	type plain SDConfig
 	err := unmarshal((*plain)(c))
@@ -87,6 +88,18 @@ func (c *SDConfig) UnmarshalYAML(unmarshal func(interface{}) error) error {
 		return err
 	}
 
+	if c.TenantID == "" {
+		return fmt.Errorf("role missing (one of: pod, service, endpoints, node)")
+	}
+	if c.ClientID == "" {
+		return fmt.Errorf("role missing (one of: pod, service, endpoints, node)")
+	}
+	if c.ClientSecret == "" {
+		return fmt.Errorf("role missing (one of: pod, service, endpoints, node)")
+	}
+	if c.SubscriptionID == "" {
+		return fmt.Errorf("role missing (one of: pod, service, endpoints, node)")
+	}
 	return yaml_util.CheckOverflow(c.XXX, "azure_sd_config")
 }
 

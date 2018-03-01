@@ -93,6 +93,7 @@ func (c *SDConfig) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	if err != nil {
 		return err
 	}
+	// TODO validate config
 	if err := yaml_util.CheckOverflow(c.XXX, "ec2_sd_config"); err != nil {
 		return err
 	}

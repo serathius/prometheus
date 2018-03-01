@@ -55,6 +55,7 @@ type ServersetSDConfig struct {
 
 // UnmarshalYAML implements the yaml.Unmarshaler interface.
 func (c *ServersetSDConfig) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	// TODO validate config
 	*c = DefaultServersetSDConfig
 	type plain ServersetSDConfig
 	err := unmarshal((*plain)(c))
