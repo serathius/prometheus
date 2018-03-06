@@ -556,22 +556,27 @@ func (h *Handler) graph(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) status(w http.ResponseWriter, r *http.Request) {
+	dbStatus := h.tsdb().Status()
 	h.executeTemplate(w, "status.html", struct {
-		Birth          time.Time
-		CWD            string
-		Version        *PrometheusVersion
-		Alertmanagers  []*url.URL
-		GoroutineCount int
-		GOMAXPROCS     int
-		GOGC           string
+		Birth           time.Time
+		CWD             string
+		Version         *PrometheusVersion
+		Alertmanagers   []*url.URL
+		GoroutineCount  int
+		GOMAXPROCS      int
+		GOGC            string
+		ChunkCount      int64
+		TimeSeriesCount int64
 	}{
-		Birth:          h.birth,
-		CWD:            h.cwd,
-		Version:        h.versionInfo,
-		Alertmanagers:  h.notifier.Alertmanagers(),
-		GoroutineCount: runtime.NumGoroutine(),
-		GOMAXPROCS:     runtime.GOMAXPROCS(0),
-		GOGC:           os.Getenv("GOGC"),
+		Birth:           h.birth,
+		CWD:             h.cwd,
+		Version:         h.versionInfo,
+		Alertmanagers:   h.notifier.Alertmanagers(),
+		GoroutineCount:  runtime.NumGoroutine(),
+		GOMAXPROCS:      runtime.GOMAXPROCS(0),
+		GOGC:            os.Getenv("GOGC"),
+		ChunkCount:      dbStatus.ChunkCount,
+		TimeSeriesCount: dbStatus.TimeSeriesCount,
 	})
 }
 
